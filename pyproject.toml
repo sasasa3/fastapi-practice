@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "demo-app"
+version = "0.1.0"
+description = ""
+authors = ["Sato <test@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0"
+sqlalchemy = "^2.0.45"
+aiomysql = "^0.3.2"
+cryptography = "^46.0.3"
+asyncpg = "^0.31.0"
+psycopg2-binary = "^2.9.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.2,<10.0.0)",
+    "pytest-asyncio (>=1.3.0,<2.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "aiosqlite (>=0.22.1,<0.23.0)"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

@@ -1,0 +1,33 @@
+version: '3'
+services:
+  # 1. Pythonアプリの設定
+  demo-app:
+    build: .
+    volumes:
+      - .:/src
+      - /src/.venv
+    ports:
+      - 8000:8000
+    command: poetry run uvicorn api.main:app --host 0.0.0.0 --reload
+    environment:
+      - WATCHFILES_FORCE_POLLING=true # ホットリロードを確実にする
+      - PYTHONPATH=/src  
+    depends_on:
+      - db # dbが起動してから自分も起動する設定
+
+  # 2. データベースの設定
+  db:
+    image: mysql:8.0
+    # ここで「db」という名前が確定
+    container_name: fastapi-practice-db-1
+    environment:
+      MYSQL_DATABASE: demo             # 作成するDB名
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes" # パスワードなしで接続許可
+    ports:
+      - 3306:3306 # 外からもアクセスできるようにする
+    volumes:
+      - db_data:/var/lib/mysql # データが消えないように保存場所を確保
+
+# データの保存領域を定義
+volumes:
+  db_data:
